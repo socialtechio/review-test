@@ -16,7 +16,14 @@
 ### Код
 Код рішення також доступний [в файлі](src/tt-code.php)
 ```php
-getByName($request->get('name'))) {
+<?php
+
+class ProfileController extends AbstractController
+{
+    public function load(Request $request): string
+    {
+        $repository = new UserRepository();
+        if (!$user = $repository->getByName($request->get('name'))) {
             return '';
         }
         return json_encode(['id' => $user->id, 'name' => $user->name, 'dossier' => ['data' => $user->dossier->data]]);
@@ -63,14 +70,14 @@ class UserRepository
     {
         try {
             $db = Database::getInstance();
-            $row = $db->query('SELECT * FROM users WHERE id= "' . $id . '" LIMIT 1');
+            $row = $db->query('SELECT * FROM users WHERE id= ' . $id . ' LIMIT 1');
             if (!count($row)) {
                 return null;
             }
 
             $user = new User($row['id'], null, $row['name']);
 
-            $docRow = $db->query('SELECT * FROM dossier WHERE user_id= "' . $id . '" LIMIT 1');
+            $docRow = $db->query('SELECT * FROM dossier WHERE user_id= ' . $id . ' LIMIT 1');
             if (!count($docRow)) {
                 $user->__construct($row['id'], new Dossier($docRow['name'], $user), $row['name']);
             }
