@@ -70,14 +70,14 @@ class UserRepository
     {
         try {
             $db = Database::getInstance();
-            $row = $db->query('SELECT * FROM users WHERE id= ' . $id . ' LIMIT 1');
+            $row = $db->query('SELECT * FROM users WHERE id= "' . $id . '" LIMIT 1');
             if (!count($row)) {
                 return null;
             }
 
             $user = new User($row['id'], null, $row['name']);
 
-            $docRow = $db->query('SELECT * FROM dossier WHERE user_id= ' . $id . ' LIMIT 1');
+            $docRow = $db->query('SELECT * FROM dossier WHERE user_id= "' . $id . '" LIMIT 1');
             if (!count($docRow)) {
                 $user->__construct($row['id'], new Dossier($docRow['name'], $user), $row['name']);
             }
